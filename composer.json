@@ -1,0 +1,9 @@
+{
+    "name": "duc/query-builder",
+    "autoload": {
+        "psr-4": {
+            "Duc\\QueryBuilder\\": "src/"
+        }
+    },
+    "require": {}
+}

@@ -14,6 +14,8 @@ class QueryBuilder {
         $this->pdo = (new Connection($config))->pdo;
     }
 
+
+
     public function __call ($method, $args = array())
     {
         //AND OPERATOR
@@ -41,6 +43,7 @@ class QueryBuilder {
     }
 
 
+
     public function select()
     {
         $args = func_get_args();
@@ -55,6 +58,8 @@ class QueryBuilder {
         $this->_query = "SELECT {$val} ";
         return $this;
     }
+
+
 
     public function insert()
     {
@@ -107,12 +112,55 @@ class QueryBuilder {
     {
         $args = func_get_args();
         $val = '';
+
         if (is_string($args[2])) {
             $val = "'{$args[2]}'";
         } else {
             $val = $args[2];
         }
         $query = "DELETE FROM {$args[0]} WHERE {$args[1]}" . "=" . "{$val}";
+
+        // echo($query);
+        $this->_query = $query;
+        return $this;
+    }
+
+
+
+    public function update() {
+        $args = func_get_args();
+        $set = '';
+
+        $x = 1;
+        foreach ($args[1] as $name => $value) {
+            if (is_string($value)) {
+                $set .= "{$name} = '$value'";
+            } else {
+                $set .= "{$name} = $value";
+            }
+            
+            
+            if ($x < count($args[1])) {
+                $set .= ", ";
+            }
+            $x++;
+        }
+
+        foreach ($args[2] as $key => $val) {
+            $field = $args[2][0];
+            $operator = $args[2][1];
+            $value = $args[2][2];
+            
+            if (is_array($val)) {
+                $field = $val[2][0];
+                $operator = $val[2][1];
+                $value = $val[2][2];
+            }
+        }
+        $where = "{$field} {$operator} {$value}";
+
+        $query = "UPDATE {$args[0]} SET {$set} WHERE {$where}";
+
         // echo($query);
         $this->_query = $query;
         return $this;
@@ -147,6 +195,8 @@ class QueryBuilder {
         return $this;
     }
 
+
+
     public function where()
     {
         $args = func_get_args();
@@ -169,6 +219,8 @@ class QueryBuilder {
         return $this;
     }
 
+
+
     public function order($column, $sort = 'ASC')
     {
         if (isset($column)) {
@@ -181,6 +233,8 @@ class QueryBuilder {
         return $this;
     }
 
+
+
     public function execute()
     {
         if ($this->pdo) {
@@ -189,9 +243,11 @@ class QueryBuilder {
 
             return $data;
         } else {
-            throw new \Exception("PDO chua duoc khoi tao");
+            throw new \Exception("PDO chưa được khởi tạo");
         }
     }
+
+
 
     public function get()
     {
@@ -201,7 +257,7 @@ class QueryBuilder {
             $data = $query1->fetchAll(\PDO::FETCH_OBJ);
             return $data;
         } else {
-            throw new \Exception("PDO chua duoc khoi tao");
+            throw new \Exception("PDO chưa được khởi tạo");
         }
     }
 }

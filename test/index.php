@@ -16,5 +16,5 @@ $config = [
 ];
 
 $db = new QueryBuilder($config);
-$data = $db->select('user_id', 'user_email')->from('users', 'admins')->execute();
+$data = $db->select('id', 'email')->from('users')->execute();
 ?>

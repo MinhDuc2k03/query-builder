@@ -11,13 +11,13 @@ class QueryBuilder {
 
     public function __construct(array $config)
     {
-        $this->pdo = new Connection($config);
+        $this->pdo = (new Connection($config))->pdo;
     }
 
     public function __call ($method, $args = array())
     {
         //AND OPERATOR
-        if ($function === 'and') {
+        if ($method === 'and') {
             $field = $args[0];
             $operator = $args[1];
             $value = $args[2];
@@ -28,7 +28,7 @@ class QueryBuilder {
             return $this;
 
         //OR OPERATOR
-        } elseif ($function === 'or') {
+        } elseif ($method === 'or') {
             $field = $args[0];
             $operator = $args[1];
             $value = $args[2];
@@ -129,7 +129,6 @@ class QueryBuilder {
     {
         if ($this->pdo) {
             $query = $this->_query;
-            echo($query);
             $data = $this->pdo->query($query);
             return $data;
         } else {

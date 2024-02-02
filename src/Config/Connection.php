@@ -3,7 +3,7 @@ namespace Duc\QueryBuilder\Config;
 use PDO;
 
 class Connection {
-    protected $pdo;
+    public $pdo;
     
     public function __construct(array $config)
     {
@@ -33,11 +33,6 @@ class Connection {
     private function disconnect()
     {
         $this->pdo = null;
-    }
-
-    public function execute()
-    {
-
     }
 }
 ?>

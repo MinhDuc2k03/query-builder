@@ -56,6 +56,70 @@ class QueryBuilder {
         return $this;
     }
 
+    public function insert()
+    {
+        $args = func_get_args();
+        $passValue = false;
+        $firstValue = false;
+
+        for ($i = 0; $i < count($args); $i++) {
+            if ($i == 0) {
+                $query = "INSERT INTO {$args[0]}";
+            }
+
+            if ($args[$i] == "VALUES") {
+                $query .= " {$args[$i]}";
+                $passValue = true;
+            }
+
+            if (is_array($args[$i])) {
+                if ($firstValue) {
+                    $query .= ",";
+                }
+
+                $query .= " (";
+                foreach ($args[$i] as $field) {
+                    if(is_string($field) && $passValue) {
+                        $query .= "'{$field}'";
+                    } else {
+                        $query .= $field;
+                    }
+
+                    if ($field != end($args[$i])) {
+                        $query .= ', ';
+                    }
+                }
+                $query .= ")";
+                if ($passValue == true) {
+                    $firstValue = true;
+                }
+            }
+        }
+
+        // echo($query);
+        $this->_query = $query;
+        return $this;
+    }
+
+
+
+    public function delete()
+    {
+        $args = func_get_args();
+        $val = '';
+        if (is_string($args[2])) {
+            $val = "'{$args[2]}'";
+        } else {
+            $val = $args[2];
+        }
+        $query = "DELETE FROM {$args[0]} WHERE {$args[1]}" . "=" . "{$val}";
+        // echo($query);
+        $this->_query = $query;
+        return $this;
+    }
+
+
+
     public function from()
     {
         $args = func_get_args();
@@ -71,6 +135,8 @@ class QueryBuilder {
         $this->_query .= "FROM {$values}";
         return $this;
     }
+
+
 
     public function join($table, $condition, $type = 'INNER')
     {
@@ -115,21 +181,24 @@ class QueryBuilder {
         return $this;
     }
 
-    
-    public function get($table, $where)
-    {
-        return $this->select('*')->from($table)->where($where)->fetch($fetchType);
-    }
-
-    public function get_all($table) {
-        return $this->select('*')->from($table)->fetch($fetchType);
-    }
-
     public function execute()
     {
         if ($this->pdo) {
             $query = $this->_query;
             $data = $this->pdo->query($query);
+
+            return $data;
+        } else {
+            throw new \Exception("PDO chua duoc khoi tao");
+        }
+    }
+
+    public function get()
+    {
+        if ($this->pdo) {
+            $query = $this->_query;
+            $query1 = $this->pdo->query($query);
+            $data = $query1->fetchAll(\PDO::FETCH_OBJ);
             return $data;
         } else {
             throw new \Exception("PDO chua duoc khoi tao");

@@ -3,8 +3,7 @@
     "description": "composer package for simple query builder",
     "authors": [
         {
-            "name": "duc",
-            "email": "mducm2013@gmail.com"
+            "name": "duc"
         }
     ],
     "autoload": {

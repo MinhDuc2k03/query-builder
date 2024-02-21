@@ -1,6 +1,5 @@
 <?php
-namespace Duc;
-require '../vendor/autoload.php';
+require_once __DIR__ . '/vendor/autoload.php';
 use Duc\QueryBuilder\QueryBuilder;
 
 $servername = "localhost";
@@ -46,4 +45,3 @@ print_r($data);
 // $data = $db->select('*')->from('users')->get();
 // print_r($data);
 ?>
-

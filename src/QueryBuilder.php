@@ -234,7 +234,7 @@ class QueryBuilder {
     }
 
 
-
+    //  Trả về query vừa tạo ra
     public function execute()
     {
         if ($this->pdo) {
@@ -248,7 +248,7 @@ class QueryBuilder {
     }
 
 
-
+    //  Trả về dữ liệu lấy được
     public function get()
     {
         if ($this->pdo) {

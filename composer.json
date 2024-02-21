@@ -1,5 +1,12 @@
 {
     "name": "duc/query-builder",
+    "description": "composer package for simple query builder",
+    "authors": [
+        {
+            "name": "duc",
+            "email": "mducm2013@gmail.com"
+        }
+    ],
     "autoload": {
         "psr-4": {
             "Duc\\QueryBuilder\\": "src/"

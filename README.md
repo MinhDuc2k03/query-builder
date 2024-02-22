@@ -4,7 +4,7 @@
 
 ## Installation
 ```
-composer require duc/query-builder
+composer require duc/query-builder:dev-main
 ```
 
 

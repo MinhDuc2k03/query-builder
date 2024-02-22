@@ -1,6 +1,7 @@
 {
     "name": "duc/query-builder",
     "description": "composer package for simple query builder",
+    "minimum-stability": "stable",
     "authors": [
         {
             "name": "duc"
@@ -11,5 +12,8 @@
             "Duc\\QueryBuilder\\": "src/"
         }
     },
-    "require": {}
+    "require": {
+        "ext-pdo": "*",
+        "PHP": ">=7.0"
+    }
 }

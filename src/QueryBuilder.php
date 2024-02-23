@@ -15,35 +15,7 @@ class QueryBuilder {
     }
 
 
-
-    public function __call ($method, $args = array())
-    {
-        //AND OPERATOR
-        if ($method === 'and') {
-            $field = $args[0];
-            $operator = $args[1];
-            $value = $args[2];
-
-            if (in_array($operator, OPERATORS)) {
-                $this->_query .= " AND {$field} {$operator} ?";
-            }
-            return $this;
-
-        //OR OPERATOR
-        } elseif ($method === 'or') {
-            $field = $args[0];
-            $operator = $args[1];
-            $value = $args[2];
-
-            if (in_array($operator, OPERATORS)) {
-                $this->_query .= " OR {$field} {$operator} ?";
-            }
-            return $this;
-        }
-    }
-
-
-
+    
     public function select()
     {
         $args = func_get_args();
@@ -64,6 +36,12 @@ class QueryBuilder {
     public function insert()
     {
         $args = func_get_args();
+        
+        if (count($args) < 3) {
+            $this->_query = null;
+            return $this;
+        }
+
         $passValue = false;
         $firstValue = false;
 
@@ -111,6 +89,12 @@ class QueryBuilder {
     public function delete()
     {
         $args = func_get_args();
+        
+        if (count($args) < 3) {
+            $this->_query = null;
+            return $this;
+        }
+
         $val = '';
 
         if (is_string($args[2])) {
@@ -239,9 +223,14 @@ class QueryBuilder {
     {
         if ($this->pdo) {
             $query = $this->_query;
-            $data = $this->pdo->query($query);
-
-            return $data;
+            if($query) {
+                $data = $this->pdo->query($query);
+                return $data;
+            } else {
+                echo("Error. Try again");
+                echo(PHP_EOL);
+                return 0;
+            }
         } else {
             throw new \Exception("PDO chưa được khởi tạo");
         }
@@ -254,8 +243,13 @@ class QueryBuilder {
         if ($this->pdo) {
             $query = $this->_query;
             $query1 = $this->pdo->query($query);
-            $data = $query1->fetchAll(\PDO::FETCH_OBJ);
-            return $data;
+            if($query1) {
+                $data = $query1->fetchAll(\PDO::FETCH_OBJ);
+                return $data;
+            } else {
+                echo "Something has gone wrong! Try again";
+                return 0;
+            }
         } else {
             throw new \Exception("PDO chưa được khởi tạo");
         }

@@ -95,14 +95,15 @@ class QueryBuilder {
             return $this;
         }
 
-        $val = '';
+        $value = '';
 
         if (is_string($args[2])) {
-            $val = "'{$args[2]}'";
+            $value = "'{$args[2]}'";
         } else {
-            $val = $args[2];
+            $value = $args[2];
         }
-        $query = "DELETE FROM {$args[0]} WHERE {$args[1]}" . "=" . "{$val}";
+        
+        $query = "DELETE FROM {$args[0]} WHERE {$args[1]}" . "=" . "{$value}";
 
         // echo($query);
         $this->_query = $query;
@@ -135,11 +136,11 @@ class QueryBuilder {
             $operator = $args[2][1];
             $value = $args[2][2];
             
-            if (is_array($val)) {
-                $field = $val[2][0];
-                $operator = $val[2][1];
-                $value = $val[2][2];
-            }
+            // if (is_array($val)) {
+            //     $field = $val[2][0];
+            //     $operator = $val[2][1];
+            //     $value = $val[2][2];
+            // }
         }
         $where = "{$field} {$operator} {$value}";
 
@@ -169,7 +170,7 @@ class QueryBuilder {
     }
 
 
-
+    /*
     public function join($table, $condition, $type = 'INNER')
     {
         if ($table != '' && !is_null($table) && $condition != '' && !is_null($condition)) {
@@ -216,7 +217,7 @@ class QueryBuilder {
         }
         return $this;
     }
-
+    */
 
     //  Trả về query vừa tạo ra
     public function execute()
@@ -229,7 +230,7 @@ class QueryBuilder {
             } else {
                 echo("Error. Try again");
                 echo(PHP_EOL);
-                return 0;
+                return;
             }
         } else {
             throw new \Exception("PDO chưa được khởi tạo");
@@ -248,7 +249,7 @@ class QueryBuilder {
                 return $data;
             } else {
                 echo "Something has gone wrong! Try again";
-                return 0;
+                return;
             }
         } else {
             throw new \Exception("PDO chưa được khởi tạo");
